@@ -41,9 +41,7 @@ public class MusicMenuFragment extends Fragment {
     private List<MusicInfo> musicInfoList;
     private int position;
     private MusicReceiver musicReceiver;
-    //private TextView playingTitle;
-    //private ImageButton playAndPause;
-    //private boolean isPlaying = false;
+
     private SharedPreferences sharedPreferences;
     private AllMusicCallbacks allMusicCallbacks;
     @Override

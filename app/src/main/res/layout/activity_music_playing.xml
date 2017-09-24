@@ -14,7 +14,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#244dc7">
+        android:background="@color/colorPrimary">
         <TextView
             android:id="@+id/artist_text"
             android:layout_width="wrap_content"
@@ -39,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@mipmap/shadow_down"/>
-    <com.example.cyc.myapplication.utils.LyricView
+    <TextView
         android:id="@+id/lrc_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

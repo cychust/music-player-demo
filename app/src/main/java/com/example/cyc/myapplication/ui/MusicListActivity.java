@@ -86,13 +86,12 @@ public class MusicListActivity extends BaseActivity implements NavigationDrawerF
             }
         };
         mDrawerToggle.syncState();
-       // mDrawerLayout.setOnDragListener();
         getSupportFragmentManager().beginTransaction().replace(R.id.container,new MusicMenuFragment()).commit();
         playingTitle = (TextView)findViewById(R.id.title_playing);
         playAndPause = (ImageButton)findViewById(R.id.playing_button);
 
 
-   //     selfNotification();
+
 
     }
 
@@ -109,13 +108,12 @@ public class MusicListActivity extends BaseActivity implements NavigationDrawerF
     @Override
     protected void onResume() {
         super.onResume();
-  //      MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        MobclickAgent.onPause(this);
+
     }
 
     @Override
@@ -172,7 +170,7 @@ public class MusicListActivity extends BaseActivity implements NavigationDrawerF
         });
     }
 
-    //创建一个actionbar的菜单
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.music_list, menu);
@@ -183,7 +181,7 @@ public class MusicListActivity extends BaseActivity implements NavigationDrawerF
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_exit) {
-            //退出程序，将播放状态保存为false
+
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("isPlaying",false);
             editor.commit();
@@ -202,9 +200,7 @@ public class MusicListActivity extends BaseActivity implements NavigationDrawerF
             case 2:
                 manager.beginTransaction().replace(R.id.container , new FavoriteFragment()).commit();
                 break;
-            //case 3:
-              //  startActivity(new Intent(this,AboutActivity.class));
-                //break;
+
         }
 
     }
@@ -230,7 +226,6 @@ public class MusicListActivity extends BaseActivity implements NavigationDrawerF
         builder.setContentTitle("Notification");
         builder.setSmallIcon(R.mipmap.icon_launcher);
         RemoteViews remoteViews=new RemoteViews(getPackageName(),R.layout.notification_layout);
-//        remoteViews.setTextViewText(R.id.song_name,musicInfo.getMusicTitle());
             remoteViews.setImageViewResource(R.id.playandpause_notif,R.mipmap.btn_pause_normal);
         if(isPlaying) {
             Intent intent1 = new Intent(this, MusicService.class);

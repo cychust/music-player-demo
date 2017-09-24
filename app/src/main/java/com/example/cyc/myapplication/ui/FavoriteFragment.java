@@ -30,9 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class FavoriteFragment extends Fragment {
     private List<MusicInfo> favoriteMusicInfoList;
     private int mPosition;

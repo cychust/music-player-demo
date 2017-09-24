@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:background="#ff246ec7">
+    android:background="@android:color/white">
     <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:background="@mipmap/icon_launcher"/>
     <TextView
         android:layout_marginTop="20dp"
@@ -16,13 +16,13 @@
         android:layout_height="wrap_content"
         android:text="Welcome to use "
         android:textSize="18sp"
-        android:textColor="#fff"/>
+        android:textColor="#FFD86D"/>
     <TextView
         android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SmartMusic"
-        android:textColor="#fff"
+        android:text="LowMusic"
+        android:textColor="#FFD86D"
         android:textSize="40sp"/>
 
 </LinearLayout>

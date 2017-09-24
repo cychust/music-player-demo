@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.WindowManager;
 
 
 import com.example.cyc.myapplication.R;
@@ -19,7 +20,7 @@ public class WelcomeActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        //MobclickAgent.setDebugMode( true );
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

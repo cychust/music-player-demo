@@ -18,25 +18,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cyc.myapplication.R;
-import com.example.cyc.myapplication.adapter.FileUtil;
 import com.example.cyc.myapplication.service.MusicService;
 import com.example.cyc.myapplication.utils.AppConstant;
-import com.example.cyc.myapplication.utils.LyricView;
 import com.example.cyc.myapplication.utils.MediaUtil;
 import com.example.cyc.myapplication.utils.MusicInfo;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 
 
 
-import org.json.JSONObject;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.msebera.android.httpclient.Header;
+
 
 
 /**
@@ -65,7 +58,7 @@ public class MusicPlayingActivity extends BaseActivity {
     private UpdateTimeCallback updateTimeCallback = null;
     private Handler handler = new Handler();
     private MusicReceiver musicReceiver;
-    private LyricView lrcView;
+    private TextView lrcView;
     private Toolbar mToolbar;
 
     @Override
@@ -129,7 +122,7 @@ public class MusicPlayingActivity extends BaseActivity {
         seekBar = (SeekBar) findViewById(R.id.seekBar);
         currentTimeText = (TextView) findViewById(R.id.current_time_text);
         totalTimeText = (TextView) findViewById(R.id.total_time_text);
-        lrcView = (LyricView) findViewById(R.id.lrc_view);
+        lrcView = (TextView) findViewById(R.id.lrc_view);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
@@ -331,7 +324,7 @@ public class MusicPlayingActivity extends BaseActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser == true) {
                     Log.i("Progress------>", progress + "");
-                    progress = (int) (progress * musicInfoList.get(position).getMusicDuration()) / 100;
+                    offset = (int) (progress * musicInfoList.get(position).getMusicDuration()) / 100;
                     seekBarProgress = progress;
 
                 }
@@ -357,9 +350,7 @@ public class MusicPlayingActivity extends BaseActivity {
                         .substring(0, musicInfoList.get(position).getMusicPath().lastIndexOf("/"))
                         + "/" + musicInfoList.get(position).getMusicTitle() + "_"
                         + musicInfoList.get(position).getMusicArtist() + ".lrc";
-                if (new FileUtil().isFileExist(lrcPath)) {
-                    initLrcView(lrcPath);
-                }
+
                 playAndPauseButton.setBackgroundResource(R.mipmap.btn_pause_normal);
                 handler.post(updateTimeCallback);
             }
@@ -439,7 +430,7 @@ public class MusicPlayingActivity extends BaseActivity {
 
             }
             handler.postDelayed(updateTimeCallback, 10);
-            updateLrcView();
+
         }
     }
 
@@ -454,7 +445,6 @@ public class MusicPlayingActivity extends BaseActivity {
                         .substring(0, musicInfoList.get(position).getMusicPath().lastIndexOf("/"))
                         + "/" + musicInfoList.get(position).getMusicTitle() + "_"
                         + musicInfoList.get(position).getMusicArtist() + ".lrc";
-                initLrcView(lrcPath);
             } else {
                 Toast.makeText(MusicPlayingActivity.this, "没有找到歌曲资源", Toast.LENGTH_SHORT).show();
                 lrcView.setText("没有找到歌词");
@@ -467,109 +457,11 @@ public class MusicPlayingActivity extends BaseActivity {
      * 用于下载并显示歌词
      */
     public void showLrc(int position) {
-        final String lrcPath = musicInfoList.get(position).getMusicPath()
-                .substring(0, musicInfoList.get(position).getMusicPath().lastIndexOf("/"))
-                + "/" + musicInfoList.get(position).getMusicTitle() + "_"
-                + musicInfoList.get(position).getMusicArtist() + ".lrc";
-        Log.i("lrcPath", lrcPath);
-
-        FileUtil fileUtil = new FileUtil();
-        if (fileUtil.isFileExist(lrcPath)) {
-            //Log.i("gecixianshi","可以显示歌词啦");
-            initLrcView(lrcPath);
-        } else {
-            initLrcView(lrcPath);
-            String url;
-            //Log.i("MusicArtist",musicInfoList.get(position).getMusicArtist());
-            if (!musicInfoList.get(position).getMusicArtist().equals("<unknown>")) {
-                url = musicInfoList.get(position).getMusicTitle() + "/"
-                        + musicInfoList.get(position).getMusicArtist();
-            } else {
-                url = musicInfoList.get(position).getMusicTitle();
-            }
-            Log.i("url----->", url);
-            AsyncHttpClient client = new AsyncHttpClient();
-            client.get("http://geci.me/api/lyric/" + url, new AsyncHttpResponseHandler() {
-
-                @Override
-                public void onStart() {
-                    // called before request is started
-                }
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                    // called when response HTTP status is "200 OK"
-                    try {
-                        String result = new String(response, "ISO-8859-1");
-                        Log.i("response", result);
-                        JSONObject jsonObject = new JSONObject(result);
-                        if (jsonObject.getInt("count") != 0) {
-                            JSONObject object = (JSONObject) jsonObject.getJSONArray("result").get(0);
-                            Log.i("lyricUrl", object.getString("lrc"));
-                            SaveLrc saveLrc = new SaveLrc(lrcPath, object.getString("lrc"));
-                            new Thread(saveLrc).start();
-                        } else {
-                            lrcView.setText("没有找到歌词");
-                        }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-                    // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-                    Log.i("response", "failure");
-                    lrcView.setText("没有找到歌词");
-
-                }
-
-                @Override
-                public void onRetry(int retryNo) {
-                    // called when request is retried
-                }
-            });
-        }
-
+    lrcView.setText("此功能待开发");
     }
 
-    /**
-     * 用于下载并保存歌词到SD卡
-     */
-    class SaveLrc implements Runnable {
-        private String path;
-        private String lrcUrl;
 
-        public SaveLrc(String path, String lrcUrl) {
-            this.path = path;
-            this.lrcUrl = lrcUrl;
-        }
 
-        @Override
-        public void run() {
-            try {
-                URL mUrl = new URL(lrcUrl);
-                HttpURLConnection connection = (HttpURLConnection) mUrl.openConnection();
-                if (new FileUtil().writeToSDFromInput(path, connection.getInputStream()) != null) {
-                    lrcHandler.sendEmptyMessage(AppConstant.SUCCESS);
-                }
-            } catch (Exception e) {
-                lrcHandler.sendEmptyMessage(AppConstant.FAILURE);
-            }
-        }
-    }
-
-    private void initLrcView(String lrcPath) {
-        lrcView.init();
-        lrcView.readLrc(lrcPath);
-        //lrcView.setText("歌词加载中");
-    }
-
-    private void updateLrcView() {
-        lrcView.setOffsetY(lrcView.getOffsetY() - lrcView.speedLrc());
-        lrcView.selectIndex((int) offset);
-        lrcView.invalidate();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

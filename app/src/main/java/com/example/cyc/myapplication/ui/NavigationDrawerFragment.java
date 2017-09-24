@@ -67,7 +67,6 @@ public class NavigationDrawerFragment extends Fragment {
                 new String[]{
                         getString(R.string.title_all_song),
                         getString(R.string.title_my_song),
-                        getString(R.string.title_about),
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
