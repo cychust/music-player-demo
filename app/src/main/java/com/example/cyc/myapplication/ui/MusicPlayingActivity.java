@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.example.cyc.myapplication.R;
 import com.example.cyc.myapplication.service.MusicService;
-import com.example.cyc.myapplication.utils.AppConstant;
+import com.example.cyc.myapplication.utils.App;
 import com.example.cyc.myapplication.utils.MediaUtil;
 import com.example.cyc.myapplication.utils.MusicInfo;
 
@@ -100,7 +100,7 @@ public class MusicPlayingActivity extends BaseActivity {
         if (isPlaying)
             playAndPauseButton.setBackgroundResource(R.mipmap.btn_pause_normal);
 
-        favoriteState = sharedPreferences.getBoolean(AppConstant.FAVORITE_STATE + musicInfo.getMusicId(), false);
+        favoriteState = sharedPreferences.getBoolean(App.FAVORITE_STATE + musicInfo.getMusicId(), false);
         if (favoriteState) {
             favoriteButton.setBackgroundResource(R.mipmap.action_favorite_selected);
         } else {
@@ -133,17 +133,17 @@ public class MusicPlayingActivity extends BaseActivity {
             //throw new NullPointerException("Toolbar must be <include> in activity's layout!");
         }
 
-        sharedPreferences = getSharedPreferences(AppConstant.APP_DATE, MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(App.APP_DATE, MODE_PRIVATE);
 
-        repeatState = sharedPreferences.getInt("repeatState", AppConstant.allRepeat);
+        repeatState = sharedPreferences.getInt("repeatState", App.allRepeat);
         switch (repeatState) {
-            case AppConstant.allRepeat:
+            case App.allRepeat:
                 repeatStateButton.setBackgroundResource(R.mipmap.btn_repeat_normal);
                 break;
-            case AppConstant.randomRepeat:
+            case App.randomRepeat:
                 repeatStateButton.setBackgroundResource(R.mipmap.btn_shuffle_normal);
                 break;
-            case AppConstant.singleRepeat:
+            case App.singleRepeat:
                 repeatStateButton.setBackgroundResource(R.mipmap.btn_singlerepeat_normal);
                 break;
         }
@@ -155,11 +155,11 @@ public class MusicPlayingActivity extends BaseActivity {
         begin = System.currentTimeMillis();
         updateTimeCallback = new UpdateTimeCallback(0);
         handler.post(updateTimeCallback);
-        //playService(AppConstant.MEDIA_PLAY);
+        //playService(App.MEDIA_PLAY);
         //注册Receiver
         musicReceiver = new MusicReceiver();
         IntentFilter filter = new IntentFilter();
-        filter.addAction(AppConstant.UPDATE_VIEW);
+        filter.addAction(App.UPDATE_VIEW);
         registerReceiver(musicReceiver, filter);
     }
 
@@ -223,7 +223,7 @@ public class MusicPlayingActivity extends BaseActivity {
                     favoriteButton.setBackgroundResource(R.mipmap.action_favorite_selected);
                     favoriteState = true;
                 }
-                editor.putBoolean(AppConstant.FAVORITE_STATE + musicInfoList.get(position).getMusicId(), favoriteState);
+                editor.putBoolean(App.FAVORITE_STATE + musicInfoList.get(position).getMusicId(), favoriteState);
                 editor.commit();
             }
         });
@@ -233,9 +233,9 @@ public class MusicPlayingActivity extends BaseActivity {
             public void onClick(View v) {
                 getMusicPosition(PREVIOUS);
                 //if (isPlaying)
-                playService(AppConstant.MEDIA_PLAY);
+                playService(App.MEDIA_PLAY);
                 //else
-                //playService(AppConstant.MEDIA_NEXT);
+                //playService(App.MEDIA_NEXT);
                 isPlaying = true;
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putBoolean("isPlaying", isPlaying);
@@ -245,7 +245,7 @@ public class MusicPlayingActivity extends BaseActivity {
                 updateTimeCallback = new UpdateTimeCallback(0);
                 begin = System.currentTimeMillis();
                 handler.post(updateTimeCallback);
-                Intent sendIntent = new Intent(AppConstant.UPDATE_VIEW);
+                Intent sendIntent = new Intent(App.UPDATE_VIEW);
                 sendIntent.putExtra("position", position);
                 sendBroadcast(sendIntent);
 
@@ -264,13 +264,13 @@ public class MusicPlayingActivity extends BaseActivity {
             public void onClick(View v) {
                 getMusicPosition(NEXT);
                 //if (isPlaying) {
-                playService(AppConstant.MEDIA_PLAY);
+                playService(App.MEDIA_PLAY);
                 updateTimeCallback = new UpdateTimeCallback(0);
                 begin = System.currentTimeMillis();
                 handler.post(updateTimeCallback);
                 //}
 //                else {
-//                    playService(AppConstant.MEDIA_NEXT);
+//                    playService(App.MEDIA_NEXT);
 //                    updateTimeCallback = new UpdateTimeCallback(0);
 //                    handler.post(updateTimeCallback);
 //                    handler.removeCallbacks(updateTimeCallback);
@@ -283,7 +283,7 @@ public class MusicPlayingActivity extends BaseActivity {
                 editor.commit();
 
                 playAndPauseButton.setBackgroundResource(R.mipmap.btn_pause_normal);
-                Intent sendIntent = new Intent(AppConstant.UPDATE_VIEW);
+                Intent sendIntent = new Intent(App.UPDATE_VIEW);
                 sendIntent.putExtra("position", position);
                 sendBroadcast(sendIntent);
                 //setViewText(position);
@@ -301,12 +301,12 @@ public class MusicPlayingActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (isPlaying) {
-                    playService(AppConstant.MEDIA_PAUSE);
+                    playService(App.MEDIA_PAUSE);
                     handler.removeCallbacks(updateTimeCallback);
                     pauseTimeMills = System.currentTimeMillis();
                     playAndPauseButton.setBackgroundResource(R.mipmap.btn_play_normal);
                 } else {
-                    playService(AppConstant.MEDIA_CONTINUE);
+                    playService(App.MEDIA_CONTINUE);
                     begin = System.currentTimeMillis() - pauseTimeMills + begin;
                     handler.post(updateTimeCallback);
                     playAndPauseButton.setBackgroundResource(R.mipmap.btn_pause_normal);
@@ -337,7 +337,7 @@ public class MusicPlayingActivity extends BaseActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                playService(AppConstant.MEDIA_SEEKTO, seekBarProgress);
+                playService(App.MEDIA_SEEKTO, seekBarProgress);
                 begin = System.currentTimeMillis();
                 updateTimeCallback = new UpdateTimeCallback(seekBarProgress);
                 isPlaying = true;
@@ -362,18 +362,18 @@ public class MusicPlayingActivity extends BaseActivity {
 
             @Override
             public void onClick(View v) {
-                if (repeatState == AppConstant.allRepeat) {
-                    repeatState = AppConstant.randomRepeat;
+                if (repeatState == App.allRepeat) {
+                    repeatState = App.randomRepeat;
                     repeatStateButton.setBackgroundResource(R.mipmap.btn_shuffle_normal);
                     editor.putInt("repeatState", repeatState);
                     editor.commit();
-                } else if (repeatState == AppConstant.randomRepeat) {
-                    repeatState = AppConstant.singleRepeat;
+                } else if (repeatState == App.randomRepeat) {
+                    repeatState = App.singleRepeat;
                     repeatStateButton.setBackgroundResource(R.mipmap.btn_singlerepeat_normal);
                     editor.putInt("repeatState", repeatState);
                     editor.commit();
-                } else if (repeatState == AppConstant.singleRepeat) {
-                    repeatState = AppConstant.allRepeat;
+                } else if (repeatState == App.singleRepeat) {
+                    repeatState = App.allRepeat;
                     repeatStateButton.setBackgroundResource(R.mipmap.btn_repeat_normal);
                     editor.putInt("repeatState", repeatState);
                     editor.commit();
@@ -390,7 +390,7 @@ public class MusicPlayingActivity extends BaseActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(AppConstant.UPDATE_VIEW)) {
+            if (action.equals(App.UPDATE_VIEW)) {
                 position = intent.getIntExtra("position", 0);
                 setViewText(position);
                 //lrcView = (LyricView)findViewById(R.id.lrc_view);
@@ -440,7 +440,7 @@ public class MusicPlayingActivity extends BaseActivity {
     Handler lrcHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == AppConstant.SUCCESS) {
+            if (msg.what == App.SUCCESS) {
                 String lrcPath = musicInfoList.get(position).getMusicPath()
                         .substring(0, musicInfoList.get(position).getMusicPath().lastIndexOf("/"))
                         + "/" + musicInfoList.get(position).getMusicTitle() + "_"

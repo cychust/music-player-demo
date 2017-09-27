@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 import com.example.cyc.myapplication.R;
 import com.example.cyc.myapplication.service.MusicService;
-import com.example.cyc.myapplication.utils.AppConstant;
+import com.example.cyc.myapplication.utils.App;
 import com.example.cyc.myapplication.utils.MediaUtil;
 import com.example.cyc.myapplication.utils.MusicInfo;
 
@@ -40,7 +40,7 @@ public class FavoriteFragment extends Fragment {
 
 
     public FavoriteFragment() {
-        // Required empty public constructor
+
     }
 
     @Override
@@ -48,9 +48,9 @@ public class FavoriteFragment extends Fragment {
         super.onCreate(savedInstanceState);
         musicReceiver = new MusicReceiver();
         IntentFilter filter = new IntentFilter();
-        filter.addAction(AppConstant.UPDATE_VIEW);
+        filter.addAction(App.UPDATE_VIEW);
 
-        //sharedPreferences = getActivity().getSharedPreferences(AppConstant.APP_DATE,getActivity().MODE_PRIVATE);
+
 
         getActivity().registerReceiver(musicReceiver, filter);
 
@@ -65,22 +65,10 @@ public class FavoriteFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View favoriteView = inflater.inflate(R.layout.fragment_favorite, container, false);
         if (checkSDCard()){
             favoriteMusicInfoList = MediaUtil.getFavoriteMusicInfo(getActivity());
-//            favoriteRecycleView = (RecyclerView)favoriteView.findViewById(R.id.favorite_Recycler_view);
-//            favoriteRecycleView.setHasFixedSize(true);
-//            mLayoutManager = new LinearLayoutManager(getActivity());
-//            favoriteRecycleView.setLayoutManager(mLayoutManager);
-//            mAdapter = new RecyclerAdapter(favoriteMusicInfoList,getActivity());
-//            favoriteRecycleView.setAdapter(mAdapter);
-//            favoriteRecycleView.setItemAnimator(new DefaultItemAnimator());
-//            Animation fadeIn = AnimationUtils.loadAnimation(getActivity(), android.R.anim.slide_in_left);
-//            fadeIn.setDuration(150);
-//            LayoutAnimationController layoutAnimationController = new LayoutAnimationController(fadeIn);
-//            favoriteRecycleView.setLayoutAnimation(layoutAnimationController);
-//            favoriteRecycleView.startLayoutAnimation();
             favoriteList = (ListView)favoriteView.findViewById(R.id.favorite_list);
             if (favoriteMusicInfoList.size() > 0){
                 SimpleAdapter adapter = new SimpleAdapter(getActivity(),
@@ -94,7 +82,7 @@ public class FavoriteFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if(favoriteMusicInfoList!=null){
-                        //updateView(selectPosition);
+
                         sendData(position,favoriteMusicInfoList);
                         MusicInfo musicInfo = favoriteMusicInfoList.get(position);
                         Log.i("musicInfo---->",musicInfo.toString());
@@ -102,7 +90,7 @@ public class FavoriteFragment extends Fragment {
                         mPosition = position;
                         intent.putExtra("position",mPosition);
                         intent.putCharSequenceArrayListExtra("musicInfoList",(ArrayList)favoriteMusicInfoList);
-                        playService(AppConstant.MEDIA_PLAY);
+                        playService(App.MEDIA_PLAY);
                         getActivity().startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.activity_open,0);
                     }
@@ -115,10 +103,7 @@ public class FavoriteFragment extends Fragment {
 
         return favoriteView;
     }
-    /**
-     * 检查SD卡是否存在
-     * @return
-     */
+
     private boolean checkSDCard()
     {
         if(android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
@@ -126,14 +111,12 @@ public class FavoriteFragment extends Fragment {
         else
             return false;
     }
-    /**
-     * 接受service发出的广播
-     */
+
     public class MusicReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(AppConstant.UPDATE_VIEW)){
+            if (action.equals(App.UPDATE_VIEW)){
                 mPosition = intent.getIntExtra("position",0);
                 //updateView(position);
                 if (favoriteMusicInfoList != null){
@@ -149,20 +132,7 @@ public class FavoriteFragment extends Fragment {
         serviceIntent.putExtra("MSG",i);
         getActivity().startService(serviceIntent);
     }
-    //    public void playFavoriteMusic(ActionBarActivity context,int i,List<MusicInfo> favoriteMusicInfoList){
-//        if(favoriteMusicInfoList!=null){
-//            //updateView(selectPosition);
-//            //MusicInfo musicInfo = favoriteMusicInfoList.get(i);
-//            //Log.i("musicInfo---->", musicInfo.toString());
-//            Intent intent = new Intent(context, MusicPlayingActivity.class);
-//            position = i;
-//            intent.putExtra("position",position);
-//            intent.putCharSequenceArrayListExtra("musicInfoList",(ArrayList)favoriteMusicInfoList);
-//            playService(AppConstant.MEDIA_PLAY);
-//            context.startActivity(intent);
-//            context.overridePendingTransition(R.anim.activity_open, 0);
-//        }
-//    }
+
     private void sendData(int position,List<MusicInfo> musicInfoList){
         if (favoriteMusicCallbacks != null){
             favoriteMusicCallbacks.onFavoriteItemClicked(position,musicInfoList);

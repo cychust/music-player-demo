@@ -5,11 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.IBinder;
-import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.example.cyc.myapplication.utils.AppConstant;
+import com.example.cyc.myapplication.utils.App;
 import com.example.cyc.myapplication.utils.MusicInfo;
 
 import java.util.List;
@@ -31,7 +30,7 @@ public class MusicService extends Service {
         super.onCreate();
         mediaPlayer=new MediaPlayer();
         mediaPlayer.setOnCompletionListener(new MusicPlayCompleteListener());
-        sharedPreferences=getSharedPreferences(AppConstant.APP_DATE,MODE_PRIVATE);
+        sharedPreferences=getSharedPreferences(App.APP_DATE,MODE_PRIVATE);
 
     }
 
@@ -44,7 +43,7 @@ public class MusicService extends Service {
     @Override
     public int onStartCommand(Intent intent,  int flags, int startId) {
 
-        repeatState=sharedPreferences.getInt("repeatState",AppConstant.allRepeat);
+        repeatState=sharedPreferences.getInt("repeatState", App.allRepeat);
         position=intent.getIntExtra("position",0);
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putInt("lastPosition",position);
@@ -56,22 +55,22 @@ public class MusicService extends Service {
             int MSG = intent.getIntExtra("MSG",0);
             Log.i("MSG--->",MSG+"");
             switch (MSG){
-                case AppConstant.MEDIA_PLAY:
+                case App.MEDIA_PLAY:
                     playMusic(musicInfo);
                     break;
-                case AppConstant.MEDIA_PAUSE:
+                case App.MEDIA_PAUSE:
                     pauseMusic();
                     break;
-                case AppConstant.MEDIA_NEXT:
+                case App.MEDIA_NEXT:
                     playMusic(musicInfo);
                     pauseMusic();
                     break;
-                case AppConstant.MEDIA_SEEKTO:
+                case App.MEDIA_SEEKTO:
                     int progress = intent.getIntExtra("progress",0);
                     mediaPlayer.seekTo(progress);
                     continueMusic();
                     break;
-                case AppConstant.MEDIA_CONTINUE:
+                case App.MEDIA_CONTINUE:
                     continueMusic();
                     break;
             }
@@ -109,22 +108,22 @@ public class MusicService extends Service {
         @Override
         public void onCompletion(MediaPlayer mediaPlayer) {
             switch (repeatState){
-                case AppConstant.allRepeat:
+                case App.allRepeat:
                     if (position == musicInfoList.size() - 1) {
                         position = 0;
                     } else {
                         position += 1;
                     }
                     break;
-                case AppConstant.randomRepeat:
+                case App.randomRepeat:
                     position = (int)((musicInfoList.size()-1)*Math.random());
                     break;
-                case AppConstant.singleRepeat:
+                case App.singleRepeat:
                     break;
             }
             musicInfo = musicInfoList.get(position);
             playMusic(musicInfo);
-            Intent sendIntent = new Intent(AppConstant.UPDATE_VIEW);
+            Intent sendIntent = new Intent(App.UPDATE_VIEW);
             sendIntent.putExtra("position",position);
             SharedPreferences.Editor editor= sharedPreferences.edit();
             editor.putInt("lastPosition",position);

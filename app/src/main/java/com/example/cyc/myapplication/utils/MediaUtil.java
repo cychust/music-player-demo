@@ -3,7 +3,6 @@ package com.example.cyc.myapplication.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.media.MediaPlayer;
 import android.provider.MediaStore;
 
 import java.util.ArrayList;
@@ -55,7 +54,7 @@ public class MediaUtil {
          * 那么这个String数组可以为null。
          * SortOrder：指定查询结果的排列顺序
          */
-        sharedPreferences = context.getSharedPreferences(AppConstant.APP_DATE,context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(App.APP_DATE,context.MODE_PRIVATE);
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 null,null,null, MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
         for(int i = 0;i < cursor.getCount();i++){
@@ -68,7 +67,7 @@ public class MediaUtil {
             long size = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE));
             long duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
             int isMusic = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.IS_MUSIC));
-            boolean favoriteState = sharedPreferences.getBoolean(AppConstant.FAVORITE_STATE+id,false);
+            boolean favoriteState = sharedPreferences.getBoolean(App.FAVORITE_STATE+id,false);
             if( isMusic!=0 && size> 1000000 && favoriteState){
                 musicInfo.setMusicId(id);
                 musicInfo.setMusicTitle(title);

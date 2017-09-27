@@ -4,7 +4,7 @@ package com.example.cyc.myapplication.utils;
  * Created by cyc on 17-9-7.
  */
 
-public class AppConstant {
+public class App {
     public static final int LOCAL_MUSIC = 1;
     public static final int FAVOURTE_MUSIC = 2;
 

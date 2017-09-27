@@ -21,20 +21,18 @@ import android.widget.TextView;
 
 import com.example.cyc.myapplication.R;
 import com.example.cyc.myapplication.service.MusicService;
-import com.example.cyc.myapplication.utils.AppConstant;
+import com.example.cyc.myapplication.utils.App;
 import com.example.cyc.myapplication.utils.MusicInfo;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.cyc.myapplication.utils.AppConstant.CommandPlay;
-
 /**
  * Created by cyc on 17-9-7.
  */
 
-public class MusicListActivity extends BaseActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+public class MainActivity extends BaseActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks,
         FavoriteFragment.FavoriteMusicCallbacks,
         MusicMenuFragment.AllMusicCallbacks {
     private Toolbar mToolbar;
@@ -53,7 +51,7 @@ public class MusicListActivity extends BaseActivity implements NavigationDrawerF
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_list);
-        sharedPreferences=getSharedPreferences(AppConstant.APP_DATE,MODE_PRIVATE);
+        sharedPreferences=getSharedPreferences(App.APP_DATE,MODE_PRIVATE);
         mToolbar=(Toolbar)findViewById(R.id.toolbar);
         position=1;
         setSupportActionBar(mToolbar);
@@ -134,11 +132,11 @@ public class MusicListActivity extends BaseActivity implements NavigationDrawerF
             @Override
             public void onClick(View v) {
                 if (isPlaying){
-                    playService(AppConstant.MEDIA_PAUSE,musicInfoList);
+                    playService(App.MEDIA_PAUSE,musicInfoList);
                     playAndPause.setBackgroundResource(R.mipmap.btn_play_normal);
                 }
                 else{
-                    playService(AppConstant.MEDIA_CONTINUE,musicInfoList);
+                    playService(App.MEDIA_CONTINUE,musicInfoList);
                     playAndPause.setBackgroundResource(R.mipmap.btn_pause_normal);
                 }
 
@@ -156,11 +154,11 @@ public class MusicListActivity extends BaseActivity implements NavigationDrawerF
             @Override
             public void onClick(View v) {
                 if (isPlaying){
-                    playService(AppConstant.MEDIA_PAUSE,favoriteMusicInfoList);
+                    playService(App.MEDIA_PAUSE,favoriteMusicInfoList);
                     playAndPause.setBackgroundResource(R.mipmap.btn_play_normal);
                 }
                 else{
-                    playService(AppConstant.MEDIA_CONTINUE,favoriteMusicInfoList);
+                    playService(App.MEDIA_CONTINUE,favoriteMusicInfoList);
                     playAndPause.setBackgroundResource(R.mipmap.btn_pause_normal);
                 }
 
@@ -185,7 +183,7 @@ public class MusicListActivity extends BaseActivity implements NavigationDrawerF
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("isPlaying",false);
             editor.commit();
-            Intent intent = new Intent(MusicListActivity.this, MusicService.class);
+            Intent intent = new Intent(MainActivity.this, MusicService.class);
             stopService(intent);
             System.exit(0);
         }
@@ -231,28 +229,28 @@ public class MusicListActivity extends BaseActivity implements NavigationDrawerF
             Intent intent1 = new Intent(this, MusicService.class);
             intent1.putExtra("position",playPosition);
             intent1.putCharSequenceArrayListExtra("musicInfoList", (ArrayList) musicInfoList);
-            intent1.putExtra("MSG", AppConstant.MEDIA_PLAY);
+            intent1.putExtra("MSG", App.MEDIA_PLAY);
             PendingIntent pendingIntent1 = PendingIntent.getService(this, 5, intent1, 0);
             isPlaying=false;
             remoteViews.setOnClickPendingIntent(R.id.playandpause_notif, pendingIntent1);
         }
         if(!isPlaying) {
             Intent intent2 = new Intent(this, MusicService.class);
-            intent2.putExtra("MSG", AppConstant.MEDIA_PAUSE);
+            intent2.putExtra("MSG", App.MEDIA_PAUSE);
             intent2.putExtra("position",playPosition);
             intent2.putCharSequenceArrayListExtra("musicInfoList", (ArrayList) musicInfoList);
             PendingIntent pendingIntent2 = PendingIntent.getService(this, 6, intent2, 0);
             remoteViews.setOnClickPendingIntent(R.id.playandpause_notif, pendingIntent2);
         }
         Intent intent3=new Intent(this,MusicService.class);
-        intent3.putExtra("MSG",AppConstant.MEDIA_NEXT);
+        intent3.putExtra("MSG", App.MEDIA_NEXT);
         intent3.putExtra("position",playPosition);
         intent3.putCharSequenceArrayListExtra("musicInfoList", (ArrayList) musicInfoList);
         PendingIntent pendingIntent3=PendingIntent.getService(this,7,intent3,0);
         remoteViews.setOnClickPendingIntent(R.id.previous_btn_notif,pendingIntent3);
 
         Intent intent4=new Intent(this,MusicService.class);
-        intent4.putExtra("MSG",AppConstant.MEDIA_NEXT);
+        intent4.putExtra("MSG", App.MEDIA_NEXT);
         intent4.putExtra("position",playPosition);
         intent4.putCharSequenceArrayListExtra("musicInfoList", (ArrayList) musicInfoList);
         PendingIntent pendingIntent4=PendingIntent.getService(this,8,intent4,0);

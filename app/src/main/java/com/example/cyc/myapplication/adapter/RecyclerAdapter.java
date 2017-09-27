@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.example.cyc.myapplication.R;
 import com.example.cyc.myapplication.service.MusicService;
 import com.example.cyc.myapplication.ui.MusicPlayingActivity;
-import com.example.cyc.myapplication.utils.AppConstant;
+import com.example.cyc.myapplication.utils.App;
 import com.example.cyc.myapplication.utils.MusicInfo;
 
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 Intent intent=new Intent(mContext,MusicPlayingActivity.class);
                 intent.putExtra("position",position);
                 intent.putCharSequenceArrayListExtra("musicInfoList",(ArrayList)musicList);
-                playService(AppConstant.MEDIA_PLAY,position);
+                playService(App.MEDIA_PLAY,position);
                 mContext.startActivity(intent);
             }
         });

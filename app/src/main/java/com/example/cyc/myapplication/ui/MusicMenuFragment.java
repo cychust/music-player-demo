@@ -8,25 +8,20 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.RemoteViews;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.app.Fragment;
 
 
 import com.example.cyc.myapplication.R;
 import com.example.cyc.myapplication.service.MusicService;
-import com.example.cyc.myapplication.utils.AppConstant;
+import com.example.cyc.myapplication.utils.App;
 import com.example.cyc.myapplication.utils.MediaUtil;
 import com.example.cyc.myapplication.utils.MusicInfo;
 
@@ -50,9 +45,9 @@ public class MusicMenuFragment extends Fragment {
         //注册Receiver
         musicReceiver = new MusicReceiver();
         IntentFilter filter = new IntentFilter();
-        filter.addAction(AppConstant.UPDATE_VIEW);
+        filter.addAction(App.UPDATE_VIEW);
 
-        sharedPreferences = getActivity().getSharedPreferences(AppConstant.APP_DATE,getActivity().MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences(App.APP_DATE,getActivity().MODE_PRIVATE);
 
         getActivity().registerReceiver(musicReceiver, filter);
     }
@@ -90,11 +85,11 @@ public class MusicMenuFragment extends Fragment {
 //                @Override
 //                public void onClick(View v) {
 //                    if (isPlaying){
-//                        playService(AppConstant.MEDIA_PAUSE);
+//                        playService(App.MEDIA_PAUSE);
 //                        playAndPause.setBackgroundResource(R.drawable.btn_play_normal);
 //                    }
 //                    else{
-//                        playService(AppConstant.MEDIA_CONTINUE);
+//                        playService(App.MEDIA_CONTINUE);
 //                        playAndPause.setBackgroundResource(R.drawable.btn_pause_normal);
 //                    }
 //
@@ -127,7 +122,7 @@ public class MusicMenuFragment extends Fragment {
                 position = selectPosition;
                 intent.putExtra("position",position);
                 intent.putCharSequenceArrayListExtra("musicInfoList",(ArrayList)musicInfoList);
-                playService(AppConstant.MEDIA_PLAY);
+                playService(App.MEDIA_PLAY);
                 getActivity().startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.activity_open,0);
             }
@@ -158,7 +153,7 @@ public class MusicMenuFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(AppConstant.UPDATE_VIEW)){
+            if (action.equals(App.UPDATE_VIEW)){
                 position = intent.getIntExtra("position",0);
                 //updateView(position);
                 if (musicInfoList != null){
